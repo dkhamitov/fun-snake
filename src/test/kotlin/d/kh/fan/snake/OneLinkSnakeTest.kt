@@ -4,7 +4,7 @@ import io.kotlintest.matchers.shouldBe
 import io.kotlintest.specs.BehaviorSpec
 
 class OneLinkSnakeTest : BehaviorSpec({
-    Given("a one-link snake") {
+    Given("one-link snake") {
         val (x, y, snake) = makeSnake()
         When("when I move it UP") {
             snake.up()
@@ -15,7 +15,7 @@ class OneLinkSnakeTest : BehaviorSpec({
         }
     }
 
-    Given("a one-link snake") {
+    Given("one-link snake") {
         val (x, y, snake) = makeSnake()
         When("when I move it DOWN") {
             snake.down()
@@ -26,7 +26,7 @@ class OneLinkSnakeTest : BehaviorSpec({
         }
     }
 
-    Given("a one-link snake") {
+    Given("one-link snake") {
         val (x, y, snake) = makeSnake()
         When("when I move it LEFT") {
             snake.left()
@@ -37,7 +37,7 @@ class OneLinkSnakeTest : BehaviorSpec({
         }
     }
 
-    Given("a one-link snake") {
+    Given("one-link snake") {
         val (x, y, snake) = makeSnake()
         When("when I move it RIGHT") {
             snake.right()
@@ -49,7 +49,7 @@ class OneLinkSnakeTest : BehaviorSpec({
     }
 })
 
-fun makeSnake(): Triple<Int, Int, Snake> {
+private fun makeSnake(): Triple<Int, Int, Snake> {
     val head = Point(0, 0)
     val snake = Snake(listOf(head))
     return Triple(head.x, head.y, snake)
