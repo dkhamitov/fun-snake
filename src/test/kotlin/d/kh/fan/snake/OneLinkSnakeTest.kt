@@ -3,7 +3,7 @@ package d.kh.fan.snake
 import io.kotlintest.matchers.shouldBe
 import io.kotlintest.specs.BehaviorSpec
 
-class SnakeTest : BehaviorSpec({
+class OneLinkSnakeTest : BehaviorSpec({
     Given("a one-link snake") {
         val (x, y, snake) = makeSnake()
         When("when I move it UP") {
