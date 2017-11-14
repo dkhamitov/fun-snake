@@ -12,28 +12,28 @@ class Snake(chain: List<Point> = mutableListOf(Point(0, 0))) : Iterable<Point> {
     fun size() = chain.size
 
     fun up() {
-        validateStepBack(UP)
+        checkStepBack(UP)
         move(Point(chain.first().x, chain.first().y - 1))
     }
 
     fun down() {
-        validateStepBack(DOWN)
+        checkStepBack(DOWN)
         move(Point(chain.first().x, chain.first().y + 1))
     }
 
     fun left() {
-        validateStepBack(LEFT)
+        checkStepBack(LEFT)
         move(Point(chain.first().x - 1, chain.first().y))
     }
 
     fun right() {
-        validateStepBack(RIGHT)
+        checkStepBack(RIGHT)
         move(Point(chain.first().x + 1, chain.first().y))
     }
 
     override fun iterator() = chain.iterator()
 
-    private fun validateStepBack(direction: Direction) {
+    private fun checkStepBack(direction: Direction) {
         if (chain.size == 1) {
             return
         }
@@ -50,6 +50,7 @@ class Snake(chain: List<Point> = mutableListOf(Point(0, 0))) : Iterable<Point> {
 
     private fun move(head: Point) {
         chain.removeAt(chain.lastIndex)
+        chain.forEach { point -> if (head == point) throw IllegalStateException("No bump allowed") }
         chain.add(0, head)
     }
 }
