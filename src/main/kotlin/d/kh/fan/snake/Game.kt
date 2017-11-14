@@ -10,8 +10,8 @@ fun main(args: Array<String>) {
     setupConsole()
     val keyReader = KeyReaderImpl()
 
-    val field = Field(10)
-    val snake = Snake()
+    val field = Field(15)
+    val snake = Snake(listOf(Point(4, 5), Point(5, 5), Point(6, 5), Point(6, 6), Point(6, 7)))
 
     do {
         clearScreen()
