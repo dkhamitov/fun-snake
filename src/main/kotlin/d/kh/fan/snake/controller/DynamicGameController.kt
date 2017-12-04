@@ -3,24 +3,39 @@ package d.kh.fan.snake.controller
 import d.kh.fan.snake.Direction
 import d.kh.fan.snake.Field
 import d.kh.fan.snake.Snake
-import java.util.Timer
-import kotlin.concurrent.scheduleAtFixedRate
+import java.util.concurrent.LinkedBlockingQueue
+import java.util.concurrent.TimeUnit
 
 class DynamicGameController(private val field: Field, private val snake: Snake) : GameController {
-    private var direction = Direction.NULL
-    private var timer = Timer()
+    private var controlThread = Thread(controlTask())
+    private var directions = LinkedBlockingQueue<Direction>()
 
     init {
-        render()
-        rescheduleTask()
+        startControlThread()
     }
 
     override fun run(direction: Direction) {
-        this.direction = direction
-        rescheduleTask()
+        directions.add(direction)
     }
 
-    private fun doRun() {
+    private fun startControlThread() {
+        controlThread.setUncaughtExceptionHandler({ _, ex ->
+            println(ex.message)
+            System.exit(1)
+        })
+        controlThread.start()
+    }
+
+    private fun controlTask(): () -> Unit = {
+        var direction = Direction.NULL
+        do {
+            moveSnake(direction)
+            render()
+            direction = directions.poll(1000, TimeUnit.MILLISECONDS) ?: direction
+        } while (true)
+    }
+
+    private fun moveSnake(direction: Direction) {
         when (direction) {
             Direction.UP -> snake.up()
             Direction.RIGHT -> snake.right()
@@ -28,20 +43,9 @@ class DynamicGameController(private val field: Field, private val snake: Snake) 
             Direction.LEFT -> snake.left()
             Direction.NULL -> return
         }
-        render()
     }
 
     private fun render() {
         field.render(snake)
-    }
-
-    private fun scheduleTask() {
-        timer.scheduleAtFixedRate(0, 1_000, { doRun() })
-    }
-
-    private fun rescheduleTask() {
-        timer.cancel()
-        timer = Timer()
-        scheduleTask()
     }
 }
