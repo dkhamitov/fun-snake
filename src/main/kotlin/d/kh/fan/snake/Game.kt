@@ -2,7 +2,7 @@
 
 package d.kh.fan.snake
 
-import d.kh.fan.snake.controller.StaticGameController
+import d.kh.fan.snake.controller.DynamicGameController
 import d.kh.fan.snake.reader.Key
 import d.kh.fan.snake.reader.KeyReaderImpl
 import java.io.ByteArrayOutputStream
@@ -13,14 +13,8 @@ fun main(args: Array<String>) {
 
     val field = Field(15)
     val snake = Snake(listOf(Point(4, 5), Point(5, 5), Point(6, 5), Point(6, 6), Point(6, 7)))
-    val controller = StaticGameController({ field.render(snake) }, { direction ->
-        when (direction) {
-            Direction.UP -> snake.up()
-            Direction.RIGHT -> snake.right()
-            Direction.DOWN -> snake.down()
-            Direction.LEFT -> snake.left()
-        }
-    })
+//    val controller = StaticGameController(field, snake)
+    val controller = DynamicGameController(field, snake)
     do {
         val key = keyReader.read(System.console().reader())
         when (key) {
