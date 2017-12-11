@@ -13,8 +13,19 @@ fun main(args: Array<String>) {
 
     val snake = Snake(listOf(Point(4, 5), Point(5, 5), Point(6, 5), Point(6, 6), Point(6, 7)))
     val field = Field(size = 15, snake = snake)
-//    val controller = StaticGameController(snake)
-    val controller = DynamicGameController(snake)
+    field.render()
+
+    val action: (Direction) -> Unit = {
+        when (it) {
+            Direction.UP -> snake.up()
+            Direction.RIGHT -> snake.right()
+            Direction.DOWN -> snake.down()
+            Direction.LEFT -> snake.left()
+        }
+        field.render()
+    }
+//    val controller = StaticGameController(action)
+    val controller = DynamicGameController(action)
     do {
         val key = keyReader.read()
         when (key) {
@@ -24,7 +35,6 @@ fun main(args: Array<String>) {
             Key.DOWN -> controller.run(Direction.DOWN)
             Key.LEFT -> controller.run(Direction.LEFT)
         }
-        field.render()
     } while (true)
 }
 
