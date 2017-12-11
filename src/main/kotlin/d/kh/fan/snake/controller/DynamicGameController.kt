@@ -1,12 +1,11 @@
 package d.kh.fan.snake.controller
 
 import d.kh.fan.snake.Direction
-import d.kh.fan.snake.Field
 import d.kh.fan.snake.Snake
 import java.util.concurrent.LinkedBlockingQueue
 import java.util.concurrent.TimeUnit
 
-class DynamicGameController(private val field: Field, private val snake: Snake) : GameController {
+class DynamicGameController(private val snake: Snake) : GameController {
     private var controlThread = Thread(controlTask())
     private var directions = LinkedBlockingQueue<Direction>()
 
@@ -30,7 +29,6 @@ class DynamicGameController(private val field: Field, private val snake: Snake) 
         var direction = Direction.NULL
         do {
             moveSnake(direction)
-            render()
             direction = directions.poll(1000, TimeUnit.MILLISECONDS) ?: direction
         } while (true)
     }
@@ -43,9 +41,5 @@ class DynamicGameController(private val field: Field, private val snake: Snake) 
             Direction.LEFT -> snake.left()
             Direction.NULL -> return
         }
-    }
-
-    private fun render() {
-        field.render(snake)
     }
 }

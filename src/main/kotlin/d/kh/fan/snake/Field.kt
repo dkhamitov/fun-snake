@@ -1,7 +1,7 @@
 package d.kh.fan.snake
 
-class Field(private val size: Int = 10) {
-    fun render(snake: Snake) {
+class Field(private val size: Int = 10, private val snake: Snake) {
+    fun render() {
         validate(snake)
 
         val field = Array(size, { Array(size, { '0' }) })

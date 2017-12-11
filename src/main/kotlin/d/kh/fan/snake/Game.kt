@@ -9,14 +9,14 @@ import java.io.ByteArrayOutputStream
 
 fun main(args: Array<String>) {
     setupConsole()
-    val keyReader = KeyReaderImpl()
+    val keyReader = KeyReaderImpl(System.console().reader())
 
-    val field = Field(15)
     val snake = Snake(listOf(Point(4, 5), Point(5, 5), Point(6, 5), Point(6, 6), Point(6, 7)))
-//    val controller = StaticGameController(field, snake)
-    val controller = DynamicGameController(field, snake)
+    val field = Field(size = 15, snake = snake)
+//    val controller = StaticGameController(snake)
+    val controller = DynamicGameController(snake)
     do {
-        val key = keyReader.read(System.console().reader())
+        val key = keyReader.read()
         when (key) {
             Key.QUIT -> return
             Key.UP -> controller.run(Direction.UP)
@@ -24,6 +24,7 @@ fun main(args: Array<String>) {
             Key.DOWN -> controller.run(Direction.DOWN)
             Key.LEFT -> controller.run(Direction.LEFT)
         }
+        field.render()
     } while (true)
 }
 
