@@ -9,23 +9,13 @@ import java.io.ByteArrayOutputStream
 
 fun main(args: Array<String>) {
     setupConsole()
-    val keyReader = KeyReaderImpl(System.console().reader())
 
     val snake = Snake(listOf(Point(4, 5), Point(5, 5), Point(6, 5), Point(6, 6), Point(6, 7)))
     val field = Field(size = 15, snake = snake)
     field.render()
 
-    val action: (Direction) -> Unit = {
-        when (it) {
-            Direction.UP -> snake.up()
-            Direction.RIGHT -> snake.right()
-            Direction.DOWN -> snake.down()
-            Direction.LEFT -> snake.left()
-        }
-        field.render()
-    }
-//    val controller = StaticGameController(action)
-    val controller = DynamicGameController(action)
+    val controller = makeGameController(snake, field)
+    val keyReader = KeyReaderImpl(System.console().reader())
     do {
         val key = keyReader.read()
         when (key) {
@@ -36,6 +26,20 @@ fun main(args: Array<String>) {
             Key.LEFT -> controller.run(Direction.LEFT)
         }
     } while (true)
+}
+
+private fun makeGameController(snake: Snake, field: Field): DynamicGameController {
+    val action: (Direction) -> Unit = {
+        when (it) {
+            Direction.UP -> snake.up()
+            Direction.RIGHT -> snake.right()
+            Direction.DOWN -> snake.down()
+            Direction.LEFT -> snake.left()
+        }
+        field.render()
+    }
+//    val controller = StaticGameController(action)
+    return DynamicGameController(action)
 }
 
 fun setupConsole() {

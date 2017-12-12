@@ -18,17 +18,23 @@ class DynamicGameController(private val action: (Direction) -> Unit) : GameContr
 
     private fun startControlThread() {
         controlThread.setUncaughtExceptionHandler({ _, ex ->
-            println(ex.message)
+            println("Game over: ${ex.message}")
             System.exit(1)
         })
+        controlThread.isDaemon = true
         controlThread.start()
     }
 
     private fun controlTask(): () -> Unit = {
         var direction = directions.take()
+        var count = 0
+        val interval = 10
+        val rate0 = 1_000L
+        val step = 50L
         do {
             action(direction)
-            direction = directions.poll(1000, TimeUnit.MILLISECONDS) ?: direction
+            val rate = rate0 - count++ / interval * step
+            direction = directions.poll(rate, TimeUnit.MILLISECONDS) ?: direction
         } while (true)
     }
 }
